@@ -44,3 +44,5 @@ List GCP CLI components
 This will require configuring app.yaml on the source side, then execute this command at the root directory for backend
 
 `gcloud app deploy`
+
+#### Make sure to clean-up or disable billing for the project when not in use to ensure $$ is not wasted
