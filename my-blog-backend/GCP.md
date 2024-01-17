@@ -1,3 +1,22 @@
+# Preparing the deployment to be hosted on GCP
+
+### 1. Build front-end
+This is done to include it in the backend runtime as part of the same app
+
+`cd my-blog` <br>
+`npm run build`
+
+*build* folder will be created under my-blog
+
+Copy newly built *build* folder to *my-blog-backend* dir<br>
+and don't forget to add build dir to .gitignore file as you won't want to see it in Git<br>
+You will also note that we'll need to make changes to server.js to be able to handle non-api call
+
+`app.use(express.static(path.join(__dirname, '../build')));`
+
+which will then serve your site as part of the back-end service deployed.
+
+
 # Deploying application to GCP
 
 ## Prerequisites
@@ -37,6 +56,8 @@ List GCP CLI components
 ## Deploy app to GCP Compute engine 
 
 #### Switch to a project of choice 
+Please make sure project is created and a project ID is noted<br>
+It will be something like my-react-blog-7012a or whatever it gets derived from the project name you provided
 
 `gcloud config set project <project_id>`
  

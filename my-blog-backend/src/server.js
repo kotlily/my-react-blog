@@ -5,6 +5,8 @@ import express from "express";
 import 'dotenv/config';
 import { db, connectToDB } from './db.js';
 
+// when type module is used in package.json, __dirname and __filename are not defined
+// Hence we need to use the following code to get the directory name and file name
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +22,8 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../build')));
 
+// This is a catch all for any other GET request whcih are not API calls
+// This is needed for react router to work properly and for the app to be able to send user to the index.html page
 app.get(/^(?!\/api).+/, (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
 });
