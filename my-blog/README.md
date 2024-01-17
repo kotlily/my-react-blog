@@ -1,6 +1,18 @@
 # Getting Started with Create React App
 
+### Install Node.js
+https://nodejs.org/en
+
+Once Node.js is installed, test that it works:  
+node -v
+
+npm -v 
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+`npx create-react-app my-blog`
+
 
 ## Available Scripts
 
@@ -68,3 +80,22 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Installing Dependencies/Packages
+
+### DOM Router
+`npm istall react-router-dom`  # For routing
+
+`npm install axios`  # library to be able to communicate via REST between front and back end
+
+`npm install http-proxy-middleware`  # in order to communicate 
+
+`npm install firebase`  # For authentication and authorization
+
+
+## Proxy setup for testing on the same server
+
+Create setupProxy.js file in a way that it will make sure that all /api calls from the browser are redirected to a backend service. <br>
+Then when you use axios library to make calls, you will not need to provide a full url, just /api/...
+```axios.get(`/api/articles/${articleId}`, { headers });```

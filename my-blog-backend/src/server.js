@@ -109,11 +109,11 @@ app.post('/api/articles/:name/comments', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 8000;
+const SERVER_PORT = process.env.SERVER_PORT || 8000;
 
 connectToDB(() => {
     console.log('Successfully connect to database');
-    app.listen(PORT, () => {
-        console.log('Server is listening on port ' + PORT)
+    app.listen(SERVER_PORT, () => {
+        console.log('Server is listening on port ' + SERVER_PORT)
     });
 });
