@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import admin from 'firebase-admin';
 import express from "express";
-import 'dotenv/config';
+import { config } from 'dotenv';
 import { db, connectToDB } from './db.js';
 
 // when type module is used in package.json, __dirname and __filename are not defined
@@ -11,11 +11,19 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const credentials = JSON.parse(
-    fs.readFileSync('./credentials.json')
+// Load environment variables from .env file
+const envFileName = `./.env`;
+const configResult = config({ path: envFileName });
+console.log('envFileName: ', envFileName);
+ 
+// Load firebase credentials
+const firebase_credentials = JSON.parse(
+    fs.readFileSync(`${process.env.FIREBASE_CREDENTIALS_FILE}`)
+    //fs.readFileSync(path.join(__dirname, `${process.env.FIREBASE_CREDENTIALS_FILE}`))
 );
+// Initialize firebase admin
 admin.initializeApp({
-    credential: admin.credential.cert(credentials),
+    credential: admin.credential.cert(firebase_credentials),
 });
 
 const app = express();
@@ -113,11 +121,11 @@ app.post('/api/articles/:name/comments', async (req, res) => {
     }
 });
 
-const SERVER_PORT = process.env.SERVER_PORT || 8000;
+const APP_PORT = process.env.APP_PORT || 8000;
 
 connectToDB(() => {
-    console.log('Successfully connect to database');
-    app.listen(SERVER_PORT, () => {
-        console.log('Server is listening on port ' + SERVER_PORT)
+    console.log('Successfully connected to database');
+    app.listen(APP_PORT, () => {
+        console.log('Server is listening on port ' + APP_PORT)
     });
 });

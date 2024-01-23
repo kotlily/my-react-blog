@@ -12,9 +12,10 @@
 /build
 
 # secrets
-credentials.json
+*credentials.*
+*password*
 .env
-prod-env.yaml
+*-env.yaml
 
 # misc
 .DS_Store

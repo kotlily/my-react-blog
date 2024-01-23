@@ -29,8 +29,11 @@ MongoDB is used for the database.  Currently it is hosted via MongoDB Atlas (on 
 docker-compose will read docker-compose.yaml file to operate accordingly<br>
 It will remove the need to supply things via command-line
 
-To creat/re-create and run the container<br>
+To create/re-create and run the container<br>
 `docker-componse up -d`
+
+This docker-compose example will spin up 3 instances of the backend and have nginx loadbalancing in front of it via exposed port 4000<br>
+Check nginx.conf file for more details
 
 To stop or destroy the container<br>
 `docker-compose stop|down`

@@ -1,10 +1,21 @@
 import { MongoClient } from "mongodb";
+import fs from 'fs';
 
 let db;
 
 async function connectToDB(cb) {
-    //const client = new MongoClient('mongodb://127.0.0.1:27017');
-    const client = new MongoClient(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@ilya-blog-db.ae74fjs.mongodb.net/?retryWrites=true&w=majority`);
+    // Read the credentials json file
+    const db_credentials = JSON.parse(
+            fs.readFileSync(`${process.env.DB_CREDENTIALS_FILE}`)
+        );
+
+    const MONGO_USERNAME=db_credentials.mongo_user;
+    const MONGO_PASSWORD=db_credentials.mongo_password;
+    const MONGO_CONNECTION_STRING_PREFIX=db_credentials.mongo_connection_string_prefix;
+    const MONGO_CONNECTION_STRING_SUFFIX=db_credentials.mongo_connection_string_suffix;
+
+    // Connect to the database
+    const client = new MongoClient(`${MONGO_CONNECTION_STRING_PREFIX}${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_CONNECTION_STRING_SUFFIX}`);
 
     try {
         await client.connect();
@@ -12,7 +23,8 @@ async function connectToDB(cb) {
         console.error(e);
     }
 
-    db = client.db('react-blog-db'); // same as doing 'use react-blog-db in mongosh
+    // Set the database.  Same as doing 'use react-blog-db in mongosh
+    db = client.db(`${process.env.MONGO_DB_NAME}`);
     cb();
 }
 
