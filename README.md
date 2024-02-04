@@ -45,6 +45,7 @@ export MONGO_CONNECTION_STRING_OPTIONS="retryWrites=true&w=majority"
 export MONGO_USERNAME=
 export MONGO_PASSWORD=
 export MONGO_CONNECTION_STRING_CLUSTER_URL=
+export FIREBASE_API_KEY=
 export FIREBASE_CREDENTIALS=<json as a single line string: {"name1": "value1", "name2": "value2"}>
 ```
 ### Creating a container
@@ -118,6 +119,7 @@ data:
   MONGO_PASSWORD: <b64 encoded mongodb password>
   MONGO_CONNECTION_STRING_CLUSTER_URL: <b64 encoded mondodb cluster URL>
   FIREBASE_CREDENTIALS: <b64 encoded json string>
+  FIREBASE_API_KEY: <b64 encoded json string>
 ```
 
 ##### Create secrets in the cluster
@@ -187,6 +189,11 @@ FIREBASE_CREDENTIALS:                 2279 bytes
             secretKeyRef:
               name: k8s-my-blog-secrets
               key: FIREBASE_CREDENTIALS
+        - name: FIREBASE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: k8s-my-blog-secrets
+              key: FIREBASE_API_KEY
 ```
 
 #### Ready to deploy to k8s cluster
@@ -321,6 +328,7 @@ Changed appVersion attribute to latest, but in real life you would specify and c
     MONGO_USERNAME: username
     MONGO_PASSWORD: password
     MONGO_CONNECTION_STRING_CLUSTER_URL: cluster-url
+    FIREBASE_API_KEY: firebase-api-key
     FIREBASE_CREDENTIALS: firebase-credentials    
 
 ```
@@ -375,6 +383,11 @@ Otherwise helm is trrowing this error upon installation, which does not show up 
               valueFrom:
                 secretKeyRef:
                   key:  FIREBASE_CREDENTIALS
+                  name: {{ .Release.Name }}-auth
+            - name: FIREBASE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key:  FIREBASE_API_KEY
                   name: {{ .Release.Name }}-auth 
 ```
 
@@ -402,6 +415,7 @@ export MONGO_CONNECTION_STRING_OPTIONS="retryWrites=true&w=majority"
 export MONGO_USERNAME=<usr>
 MONGO_PASSWORD=<pwd>
 MONGO_CONNECTION_STRING_CLUSTER_URL=something.mongodb.net/
+FIREBASE_API_KEY=<firebase_api_key>
 FIREBASE_CREDENTIALS=<firebase_cred_json_string>
 
 ```
@@ -427,6 +441,7 @@ $ helm install --set APP_PORT=${APP_PORT} \
                --set MONGO_USERNAME=${MONGO_USERNAME} \
                --set MONGO_PASSWORD=${MONGO_PASSWORD} \
                --set MONGO_CONNECTION_STRING_CLUSTER_URL=${MONGO_CONNECTION_STRING_CLUSTER_URL} \
+               --set FIREBASE_API_KEY=${FIREBASE_API_KEY} \
                --set FIREBASE_CREDENTIALS=${FIREBASE_CREDENTIALS} \
             my-blog-release my-blog-helm --debug --dry-run
 
@@ -466,6 +481,7 @@ $ helm install --set APP_PORT=${APP_PORT} \
                --set MONGO_USERNAME=${MONGO_USERNAME} \
                --set MONGO_PASSWORD=${MONGO_PASSWORD} \
                --set MONGO_CONNECTION_STRING_CLUSTER_URL=${MONGO_CONNECTION_STRING_CLUSTER_URL} \
+               --set FIREBASE_API_KEY=${FIREBASE_API_KEY} \
                --set FIREBASE_CREDENTIALS=${FIREBASE_CREDENTIALS} \
                my-blog-release my-blog-helm
 ```

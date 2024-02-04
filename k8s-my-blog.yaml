@@ -63,3 +63,8 @@ spec:
             secretKeyRef:
               name: k8s-my-blog-secrets
               key: FIREBASE_CREDENTIALS
+        - name: FIREBASE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: k8s-my-blog-secrets
+              key: FIREBASE_API_KEY

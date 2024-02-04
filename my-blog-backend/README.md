@@ -71,5 +71,6 @@ MONGO_CONNECTION_STRING_OPTIONS="<MongoDB connection string options: retryWrites
 MONGO_USERNAME=<MongoDB usename>
 MONGO_PASSWORD=<MongoDB password>
 MONGO_CONNECTION_STRING_CLUSTER_URL=<MongoDB connection string cluster URL: <somename>.<someid>.mongodb.net/>
+FIREBASE_API_KEY=<Firebase API key>
 FIREBASE_CREDENTIALS=<Firebase credentials JSON string>
 ```

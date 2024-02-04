@@ -19,6 +19,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the project directory, you can run:
 
 ### `npm start`
+But for this specific app to be able to start, you need to export REACT_APP_FIREBASE_API_KEY env var
+```
+$ export REACT_APP_FIREBASE_API_KEY=<key> && npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
