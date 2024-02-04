@@ -7,7 +7,8 @@ const AddCommentForm = ({ articleName, onArticleUpdated }) => {
     const [commentText, setCommentText] = useState('');
     
     const { user, isLoading } = useUser();
-
+    isLoading && console.log('Loading user...');
+    
     const addComment = async () => {
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {}; 

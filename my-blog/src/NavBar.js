@@ -1,4 +1,4 @@
-import userEvent from '@testing-library/user-event';
+//import userEvent from '@testing-library/user-event';
 import { getAuth, signOut } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import useUser from './hooks/useUser';
@@ -6,6 +6,7 @@ import useUser from './hooks/useUser';
 const NavBar = () => {
     const { user, isLoading } = useUser();
     const navigate = useNavigate();
+    isLoading && console.log('Loading user...');
 
     return (
         <nav>
