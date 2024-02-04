@@ -5,19 +5,19 @@ on:
   workflow_dispatch:
 
 env:
-  #REGISTRY: docker.io
-  #IMAGE_NAME: kotlily/my-blog-react-express
+  # REGISTRY: docker.io
+  # IMAGE_NAME: kotlily/my-blog-react-express
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  push_to_registry:
-    name: Push image to ${{ env.REGISTRY }}
+  build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -37,7 +37,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           #username: ${{ secrets.DOCKERHUB_USERNAME }}
           #password: ${{ secrets.DOCKERHUB_TOKEN }}
-
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
