@@ -101,7 +101,7 @@ docker-compose stop|down
 
 #### Prepare and apply secrets for k8s cluster
 
-##### Fill in your k8s-secretes.yaml
+##### Fill in your k8s-my-blog-secretes.yaml
 
 ###### Example of the file content
 
