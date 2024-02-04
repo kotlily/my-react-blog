@@ -1,18 +1,17 @@
 version: "3.7"
 services:
   my-blog-test:
-    image: my-blog-test-image:latest
+    image: kotlily/my-blog-react-express:latest
     expose:
       - 8000
     deploy:
-      replicas: 3
+      replicas: 2
       restart_policy:
         condition: on-failure
         max_attempts: 3
         delay: 5s
         window: 120s
     environment:
-      NODE_ENV: development
       DB_CREDENTIALS_FILE: /run/secrets/db_secret
       FIREBASE_CREDENTIALS_FILE: /run/secrets/firebase_secret
     secrets:

@@ -56,3 +56,20 @@ Runs the app in the development mode and will be listening on the specified port
 
 Server port will be defined in .env file, but if not present it will default to 8000
 
+## Required Environment variables
+These could be stored in .env or set outside of the app or set in GitHub
+#### Environment
+```
+APP_PORT=<Application Port: 8000>
+MONGO_DB_NAME=<MongoDB Name: react-blog-db>
+MONGO_CONNECTION_STRING_PREFIX=<MongoDB connection string prefix: mongodb+srv://>
+MONGO_CONNECTION_STRING_OPTIONS="<MongoDB connection string options: retryWrites=true&w=majority">
+```
+
+#### Secrets
+```
+MONGO_USERNAME=<MongoDB usename>
+MONGO_PASSWORD=<MongoDB password>
+MONGO_CONNECTION_STRING_CLUSTER_URL=<MongoDB connection string cluster URL: <somename>.<someid>.mongodb.net/>
+FIREBASE_CREDENTIALS=<Firebase credentials JSON string>
+```

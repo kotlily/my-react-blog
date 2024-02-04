@@ -57,7 +57,7 @@ List GCP CLI components
 
 #### Switch to a project of choice 
 Please make sure project is created and a project ID is noted<br>
-It will be something like my-react-blog-7012a or whatever it gets derived from the project name you provided
+It will be something like my-react-blog-1234a or whatever it gets derived from the project name you provided
 
 `gcloud config set project <project_id>`
  

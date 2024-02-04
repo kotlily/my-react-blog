@@ -4,10 +4,6 @@ FROM node:18-alpine
 # Set environment variables and specifically set the locale to avoid issues with the date format
 ENV LANG C.UTF-8
 
-# Set application environment, by default it is set to development, but can be overridden by passing --build-arg NODE_ENV=production
-ARG NODE_ENV=development
-ENV APP_ENV=${NODE_ENV}
-
 # Set working directory for frontend
 WORKDIR /usr/src/app/my-blog/frontend
 
@@ -34,7 +30,6 @@ RUN rm -rf ../frontend
 # Copy required distribution files to working directory (e.g. package.json and package-lock.json src/)
 COPY my-blog-backend/package*.json ./
 COPY my-blog-backend/src ./src
-COPY my-blog-backend/.env ./
 
 # Install dependencies
 RUN npm install

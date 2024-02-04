@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import admin from 'firebase-admin';
 import express from "express";
-import { config } from 'dotenv';
+//import { config } from 'dotenv';
+import 'dotenv/config';
 import { db, connectToDB } from './db.js';
 
 // when type module is used in package.json, __dirname and __filename are not defined
@@ -11,15 +12,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load environment variables from .env file
-const envFileName = `./.env`;
-const configResult = config({ path: envFileName });
-console.log('envFileName: ', envFileName);
  
-// Load firebase credentials
+// Load firebase credentials from environment variable
 const firebase_credentials = JSON.parse(
-    fs.readFileSync(`${process.env.FIREBASE_CREDENTIALS_FILE}`)
-    //fs.readFileSync(path.join(__dirname, `${process.env.FIREBASE_CREDENTIALS_FILE}`))
+    process.env.FIREBASE_CREDENTIALS
 );
 // Initialize firebase admin
 admin.initializeApp({

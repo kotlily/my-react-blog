@@ -4,18 +4,15 @@ import fs from 'fs';
 let db;
 
 async function connectToDB(cb) {
-    // Read the credentials json file
-    const db_credentials = JSON.parse(
-            fs.readFileSync(`${process.env.DB_CREDENTIALS_FILE}`)
-        );
 
-    const MONGO_USERNAME=db_credentials.mongo_user;
-    const MONGO_PASSWORD=db_credentials.mongo_password;
-    const MONGO_CONNECTION_STRING_PREFIX=db_credentials.mongo_connection_string_prefix;
-    const MONGO_CONNECTION_STRING_SUFFIX=db_credentials.mongo_connection_string_suffix;
+    const MONGO_USERNAME=process.env.MONGO_USERNAME;
+    const MONGO_PASSWORD=process.env.MONGO_PASSWORD;
+    const MONGO_CONNECTION_STRING_PREFIX=process.env.MONGO_CONNECTION_STRING_PREFIX;
+    const MONGO_CONNECTION_STRING_CLUSTER_URL=process.env.MONGO_CONNECTION_STRING_CLUSTER_URL;
+    const MONGO_CONNECTION_STRING_OPTIONS=process.env.MONGO_CONNECTION_STRING_OPTIONS;
 
     // Connect to the database
-    const client = new MongoClient(`${MONGO_CONNECTION_STRING_PREFIX}${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_CONNECTION_STRING_SUFFIX}`);
+    const client = new MongoClient(`${MONGO_CONNECTION_STRING_PREFIX}${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_CONNECTION_STRING_CLUSTER_URL}?${MONGO_CONNECTION_STRING_OPTIONS}`);
 
     try {
         await client.connect();
