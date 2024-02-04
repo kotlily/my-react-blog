@@ -1,0 +1,39 @@
+name: "0-Container CI/CD Pipeline"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  integration:
+    uses: ./.github/workflows/integration.yml
+    permissions:
+      contents: read
+
+  delivery:
+    needs: [integration]
+    uses: ./.github/workflows/deliver-container-image.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+#  deploy-staging:
+#    needs: [delivery]
+#    uses: ./.github/workflows/deploy-aws-eks.yml
+#    with:
+#      environment: Staging
+#    permissions:
+#      packages: write
+#    secrets: inherit
+
+#  deploy-production:
+#    needs: [deploy-staging]
+#    uses: ./.github/workflows/deploy-aws-eks.yml
+#    with:
+#      environment: Production
+#    permissions:
+#      packages: write
+#    secrets: inherit
