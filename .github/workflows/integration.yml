@@ -20,14 +20,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: my-blog/package-lock.json
-    - run: |
-        cd my-blog
-        npm ci
-    - run: |
-        cd my-blog
-        npm run build --if-present
-    - run: |
-        cd my-blog
-        npm test
+    - run: npm ci
+      working-directory: ./my-blog
+    - run: npm run build --if-present
+      working-directory: ./my-blog
 
