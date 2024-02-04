@@ -21,20 +21,20 @@ jobs:
       packages: write
       id-token: write
 
-#  deploy-staging:
-#    needs: [delivery]
-#    uses: ./.github/workflows/deploy-aws-eks.yml
-#    with:
-#      environment: Staging
-#    permissions:
-#      packages: write
-#    secrets: inherit
+  deploy-staging:
+    needs: [delivery]
+    uses: ./.github/workflows/deploy-aws-eks.yml
+    with:
+      environment: Staging
+    permissions:
+      packages: write
+    secrets: inherit
 
-#  deploy-production:
-#    needs: [deploy-staging]
-#    uses: ./.github/workflows/deploy-aws-eks.yml
-#    with:
-#      environment: Production
-#    permissions:
-#      packages: write
-#    secrets: inherit
+  deploy-production:
+    needs: [deploy-staging]
+    uses: ./.github/workflows/deploy-aws-eks.yml
+    with:
+      environment: Production
+    permissions:
+      packages: write
+    secrets: inherit
