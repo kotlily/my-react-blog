@@ -1,10 +1,11 @@
-name: Front End CI
+name: "1-Build and Test"
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   front-end-build:
