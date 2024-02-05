@@ -21,6 +21,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   EKS_CLUSTER_NAME: t2micro-eks-cluster
+  ECR_REPO_URI: ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
 
 jobs:
   deploy-eks:
@@ -63,8 +64,8 @@ jobs:
         run: |
           echo "Deploying to Staging"
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
-          docker push ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master ${{ env.ECR_REPO_URI }}
+          docker push ${{ env.ECR_REPO_URI }}
 
       - name: Deploy production with aws CLI
         if: ${{ inputs.environment == 'Production' }}
@@ -80,7 +81,9 @@ jobs:
 
       - name: Template helm chart
         run: |
-          helm template my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
+          helm template my-blog-helm --namespace default \
+            --set image.repository=${{ env.ECR_REPO_URI }} \
+            --set image.tag=latest \
             --set APP_PORT=${{ vars.APP_PORT }} \
             --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
             --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
@@ -97,7 +100,8 @@ jobs:
 
       - name: Deploy to AWS EKS with Helm
         run: |
-          helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
+          helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.ECR_REPO_URI }} \
+            --set image.tag=latest \
             --set APP_PORT=${{ vars.APP_PORT }} \
             --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
             --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
