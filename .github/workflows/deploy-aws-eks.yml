@@ -79,8 +79,8 @@ jobs:
         run: helm lint my-blog-helm
 
       - name: Template helm chart
-        run: helm template my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master
-               --set APP_PORT=${{ vars.APP_PORT }} \ 
+        run: helm template my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
+               --set APP_PORT=${{ vars.APP_PORT }} \
                --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
                --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
                --set MONGO_CONNECTION_STRING_OPTIONS="${{ vars.MONGO_CONNECTION_STRING_OPTIONS }}" \
@@ -93,8 +93,8 @@ jobs:
 
       - name: Deploy to AWS EKS with Helm
         run: |
-          helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master
-               --set APP_PORT=${{ vars.APP_PORT }} \ 
+          helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
+               --set APP_PORT=${{ vars.APP_PORT }} \
                --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
                --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
                --set MONGO_CONNECTION_STRING_OPTIONS="${{ vars.MONGO_CONNECTION_STRING_OPTIONS }}" \
