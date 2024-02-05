@@ -77,7 +77,6 @@ jobs:
 
       - name: Deploy to AWS EKS with Helm
         run: |
-          helm version
           helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master
                --set APP_PORT=${{ vars.APP_PORT }} \ 
                --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
