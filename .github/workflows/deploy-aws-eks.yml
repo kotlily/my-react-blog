@@ -22,7 +22,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  deploy-eks:
     environment:
       name: ${{ inputs.environment }}
       url: ${{ vars.URL }}
@@ -33,15 +33,21 @@ jobs:
       group: deploy-${{ inputs.environment }}
       cancel-in-progress: false
     steps:
+      - uses: actions/checkout@v4
+      - name: Use Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.13.3'
+        id: install
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Log into Container registry ${{ env.REGISTRY }}
         uses: docker/login-action@v2
@@ -54,6 +60,7 @@ jobs:
         if: ${{ inputs.environment }} == 'Staging'
         id: push
         run: |
+          echo "Deploying to Staging" >> "$GITHUB_OUTPUT"
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
           docker push ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
@@ -61,39 +68,19 @@ jobs:
       - name: Deploy production with aws CLI
         if: ${{ inputs.environment }} == 'Production'
         run: |
-          aws apprunner start-deployment --service-arn="${{ vars.SERVICE_ARN }}"
+          echo "Deploying to Production" >> "$GITHUB_OUTPUT"
 
-      - name: Wait for Deployment to Begin
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+
+      - name: Deploy to AWS EKS with Helm
         run: |
-          STATUS=$(aws apprunner describe-service --query="Service.Status" --output=text --service-arn="${{ vars.SERVICE_ARN }}")
+          echo "Deploying to AWS EKS" >> "$GITHUB_OUTPUT"
+          helm version
+        #helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master
 
-          until [ "${STATUS}" == "OPERATION_IN_PROGRESS" ];
-          do
-            echo "$(date) ${STATUS}"
-            STATUS=$(aws apprunner describe-service --query="Service.Status" --output=text --service-arn="${{ vars.SERVICE_ARN }}")
-            sleep 10;
-          done
-
-      - name: Wait for Deployment to Complete
-        id: status
-        timeout-minutes: 10
+      - name: Notify deployment status
         run: |
-          STATUS=$(aws apprunner describe-service --query="Service.Status" --output=text --service-arn="${{ vars.SERVICE_ARN }}")
-
-          while [ "${STATUS}" == "OPERATION_IN_PROGRESS" ];
-          do
-            echo "$(date) ${STATUS}"
-            STATUS=$(aws apprunner describe-service --query="Service.Status" --output=text --service-arn="${{ vars.SERVICE_ARN }}")
-            sleep 30;
-          done
-          echo "deployment_status=${STATUS}" >> "$GITHUB_OUTPUT"
-
-      - name: Check Deployment Status
-        id: check
-        run: |
-          if [ "${{ steps.status.outputs.deployment_status }}" == "RUNNING" ]; then
-            echo "Deployment successful"
-          else
-            echo "Deployment failed: ${{ steps.status.outputs.deployment_status }}"
-            exit 1
-          fi
+          echo "Deployment to ${{ inputs.environment }} completed" >> "$GITHUB_OUTPUT"
+          echo "Deployment to ${{ inputs.environment }} completed"
