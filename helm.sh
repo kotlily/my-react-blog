@@ -8,7 +8,7 @@
 # Use -w 0 to avoid line breaks in the base64 encoded string (wrapped at 76 characters by default)
 # For helm, we will read FIREBASE_CREDENTIALS_HELM which will be wrapped with single quotes in the .env file
 # Original variable name is FIREBASE_CREDENTIALS in the .env file is used for dotenv package in the backend component, whcih does not like single quotes
-FIREBASE_CREDENTIALS_BASE64=$(echo ${FIREBASE_CREDENTIALS_HELM} | base64 -w 0)
+FIREBASE_CREDENTIALS_BASE64=$(echo -n ${FIREBASE_CREDENTIALS_HELM} | base64 -w 0)
 
 helm $@ \
      --set APP_PORT=${APP_PORT} \
