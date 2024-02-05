@@ -79,31 +79,32 @@ jobs:
         run: helm lint my-blog-helm
 
       - name: Template helm chart
-        run: helm template my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
-               --set APP_PORT=${{ vars.APP_PORT }} \
-               --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
-               --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
-               --set MONGO_CONNECTION_STRING_OPTIONS="${{ vars.MONGO_CONNECTION_STRING_OPTIONS }}" \
-               --set MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
-               --set MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
-               --set MONGO_CONNECTION_STRING_CLUSTER_URL=${{ secrets.MONGO_CONNECTION_STRING_CLUSTER_URL }} \
-               --set FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} \
-               --set FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS }} \
-               --debug
+        run: |
+          helm template my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
+            --set APP_PORT=${{ vars.APP_PORT }} \
+            --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
+            --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
+            --set MONGO_CONNECTION_STRING_OPTIONS="${{ vars.MONGO_CONNECTION_STRING_OPTIONS }}" \
+            --set MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
+            --set MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
+            --set MONGO_CONNECTION_STRING_CLUSTER_URL=${{ secrets.MONGO_CONNECTION_STRING_CLUSTER_URL }} \
+            --set FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} \
+            --set FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS }} \
+            --debug
 
       - name: Deploy to AWS EKS with Helm
         run: |
           helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
-               --set APP_PORT=${{ vars.APP_PORT }} \
-               --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
-               --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
-               --set MONGO_CONNECTION_STRING_OPTIONS="${{ vars.MONGO_CONNECTION_STRING_OPTIONS }}" \
-               --set MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
-               --set MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
-               --set MONGO_CONNECTION_STRING_CLUSTER_URL=${{ secrets.MONGO_CONNECTION_STRING_CLUSTER_URL }} \
-               --set FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} \
-               --set FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS }} \
-               --debug --dry-run
+            --set APP_PORT=${{ vars.APP_PORT }} \
+            --set MONGO_DB_NAME=${{ vars.MONGO_DB_NAME }} \
+            --set MONGO_CONNECTION_STRING_PREFIX=${{ vars.MONGO_CONNECTION_STRING_PREFIX }} \
+            --set MONGO_CONNECTION_STRING_OPTIONS="${{ vars.MONGO_CONNECTION_STRING_OPTIONS }}" \
+            --set MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
+            --set MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
+            --set MONGO_CONNECTION_STRING_CLUSTER_URL=${{ secrets.MONGO_CONNECTION_STRING_CLUSTER_URL }} \
+            --set FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} \
+            --set FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS }} \
+            --debug --dry-run
 
       - name: Notify deployment status
         run: |
