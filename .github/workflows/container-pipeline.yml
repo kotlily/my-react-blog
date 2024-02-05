@@ -10,6 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  CD: "false"
 
 jobs:
   integration:
@@ -35,6 +36,8 @@ jobs:
     secrets: inherit
 
   deploy-production:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'Production'
+    ## above line is to run the job only when the workflow is manually triggered
     needs: [deploy-staging]
     uses: ./.github/workflows/deploy-aws-eks.yml
     with:
