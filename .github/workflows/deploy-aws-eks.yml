@@ -60,7 +60,7 @@ jobs:
         if: ${{ inputs.environment }} == 'Staging'
         id: push
         run: |
-          echo "Deploying to Staging" >> "$GITHUB_OUTPUT"
+          echo "Deploying to Staging"
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
           docker push ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
@@ -68,7 +68,7 @@ jobs:
       - name: Deploy production with aws CLI
         if: ${{ inputs.environment }} == 'Production'
         run: |
-          echo "Deploying to Production" >> "$GITHUB_OUTPUT"
+          echo "Deploying to Production"
 
 
       - name: Update kube config
@@ -76,11 +76,9 @@ jobs:
 
       - name: Deploy to AWS EKS with Helm
         run: |
-          echo "Deploying to AWS EKS" >> "$GITHUB_OUTPUT"
           helm version
         #helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master
 
       - name: Notify deployment status
         run: |
-          echo "Deployment to ${{ inputs.environment }} completed" >> "$GITHUB_OUTPUT"
           echo "Deployment to ${{ inputs.environment }} completed"
