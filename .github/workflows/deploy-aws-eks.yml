@@ -20,6 +20,7 @@ env:
   #IMAGE_NAME: kotlily/my-blog-react-express
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  EKS_CLUSTER_NAME: t2micro-eks-cluster
 
 jobs:
   deploy-eks:
