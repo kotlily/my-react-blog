@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Deploy staging with push to ECR
-        if: ${{ inputs.environment }} == 'Staging'
+        if: ${{ inputs.environment == 'Staging' }}
         id: push
         run: |
           echo "Deploying to Staging"
@@ -67,7 +67,7 @@ jobs:
           docker push ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
 
       - name: Deploy production with aws CLI
-        if: ${{ inputs.environment }} == 'Production'
+        if: ${{ inputs.environment == 'Production' }}
         run: |
           echo "Deploying to Production"
 
