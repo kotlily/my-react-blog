@@ -92,6 +92,9 @@ jobs:
             --set FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS }} \
             --debug
 
+      - name: List helm releases
+        run: helm list --all-namespaces
+
       - name: Deploy to AWS EKS with Helm
         run: |
           helm upgrade --install ${{ github.event.repository.name }} my-blog-helm --namespace default --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --set image.tag=master \
@@ -104,7 +107,7 @@ jobs:
             --set MONGO_CONNECTION_STRING_CLUSTER_URL=${{ secrets.MONGO_CONNECTION_STRING_CLUSTER_URL }} \
             --set FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }} \
             --set FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS }} \
-            --debug --dry-run
+            --debug
 
       - name: Notify deployment status
         run: |
