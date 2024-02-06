@@ -51,7 +51,9 @@ export FIREBASE_CREDENTIALS=<json as a single line string: {"name1": "value1", "
 ### Creating a container
 We are running here with a different port (8001) in case we are also running locally (defaulted to 8000)<br>
 
-`docker run -dp 8001:8000 --name my-blog kotlily/my-blog-react-express:latest`
+```
+docker run -dp 8001:8000 --name my-blog kotlily/my-blog-react-express:latest
+```
 
 ### Creating a container with env vars coming from a file
 You can also put env variables in .env file and source it from commandline

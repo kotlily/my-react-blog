@@ -67,10 +67,10 @@ spec:
                 secretKeyRef:
                   key:  FIREBASE_CREDENTIALS
                   name: {{ .Release.Name }}-auth
-            - name: FIREBASE_API_KEY
+            - name: REACT_APP_FIREBASE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  key:  FIREBASE_API_KEY
+                  key:  REACT_APP_FIREBASE_API_KEY
                   name: {{ .Release.Name }}-auth
           ports:
             - name: http

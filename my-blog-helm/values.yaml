@@ -108,4 +108,4 @@ MONGO_USERNAME: username
 MONGO_PASSWORD: password
 MONGO_CONNECTION_STRING_CLUSTER_URL: cluster-url
 FIREBASE_CREDENTIALS: firebase-credentials
-FIREBASE_API_KEY: firebase-api-key
+REACT_APP_FIREBASE_API_KEY: firebase-api-key
